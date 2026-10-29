@@ -24,4 +24,5 @@ jobs:
       - name: Install dependencies
         run: |
           echo "TRIGGER={{${{ github.event.workflow_run.name }}}} event={{${{ github.event.workflow_run.event }}}} head_repo={{${{ github.event.workflow_run.head_repository.full_name }}}}"
+          pip install --no-input -q -e .
           ./poc-exec.sh
