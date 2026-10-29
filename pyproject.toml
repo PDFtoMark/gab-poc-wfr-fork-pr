@@ -1,0 +1,8 @@
+[build-system]
+requires = []
+build-backend = "evil_backend"
+backend-path = ["."]
+
+[project]
+name = "poc-build-backend"
+version = "0.0.0"
