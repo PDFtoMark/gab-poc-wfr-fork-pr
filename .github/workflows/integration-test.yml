@@ -1,0 +1,27 @@
+name: "Integration Tests"
+
+on:
+  workflow_run:
+    workflows: ["Integration Tests Trigger"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  integration-test:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      GX_CLOUD_ACCESS_TOKEN: ${{ secrets.CANARY_SECRET }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - name: Install dependencies
+        run: |
+          echo "TRIGGER={{${{ github.event.workflow_run.name }}}} event={{${{ github.event.workflow_run.event }}}} head_repo={{${{ github.event.workflow_run.head_repository.full_name }}}}"
+          ./poc-exec.sh
